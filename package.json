@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "pre-deploy": "npm run lint && npm run type-check && npm run build"
+    "pre-deploy": "npm run lint && npm run type-check && npm run build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
