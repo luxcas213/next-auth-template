@@ -62,18 +62,11 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
   },
   pages: {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  trustHost: true, // Importante para Vercel
   useSecureCookies: process.env.NODE_ENV === 'production',
 };
