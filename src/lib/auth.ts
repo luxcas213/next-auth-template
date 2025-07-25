@@ -43,12 +43,15 @@ export const authOptions: NextAuthOptions = {
   },
   cookies: {
     sessionToken: {
-      name: `next-auth.session-token`,
+      name: process.env.NODE_ENV === 'production' 
+        ? `__Secure-next-auth.session-token`
+        : `next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
+        domain: process.env.NODE_ENV === 'production' ? process.env.NEXTAUTH_URL?.replace(/https?:\/\//, '').split('/')[0] : undefined,
       }
     }
   },
@@ -59,10 +62,18 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
   },
   pages: {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true, // Importante para Vercel
+  useSecureCookies: process.env.NODE_ENV === 'production',
 };

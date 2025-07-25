@@ -1,12 +1,27 @@
 "use client"
 
 import { useSession, signOut } from "next-auth/react"
+import { useEffect } from "react"
 
 export default function Page() {
   const { data: session, status } = useSession()
 
+  useEffect(() => {
+    console.log('Secure page - Session status:', status)
+    console.log('Secure page - Session data:', session)
+  }, [session, status])
+
   if (status === "loading") {
     return <div>Loading...</div>
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-6 text-red-600">Access Denied</h1>
+        <p>You need to be authenticated to view this page.</p>
+      </div>
+    )
   }
 
   return (
